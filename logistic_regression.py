@@ -1,5 +1,6 @@
 import numpy as np
 from utils import compute_loss
+from functions import sigmoid
 
 class LogisticRegressionClassifier():
     def __init__(self, lr: float = 1e-3, iterations: int = 100):
@@ -19,7 +20,7 @@ class LogisticRegressionClassifier():
             m = x.shape[0]
 
             z = np.dot(self.x, self.W) + self.b 
-            y_pred = 1 / (1 + np.exp(-z)) 
+            y_pred = sigmoid(z)
 
             dw = (1/m) * np.dot(x.T, (y_pred - self.y))  
             db = (1/m) * np.sum(y_pred - self.y) 
