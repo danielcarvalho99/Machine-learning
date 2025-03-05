@@ -1,5 +1,5 @@
 import numpy as np
-from functions import unit_step, ReLU, sigmoid
+from functions import *
 from utils import compute_loss
 
 class PerceptronClassifier():
@@ -30,7 +30,6 @@ class PerceptronClassifier():
     def predict(self, instance: np.ndarray) -> int:
          z = np.dot(instance, self.W) + self.b
          return unit_step(z)
-    
 
 class MLPClassifier():
     def __init__(self, lr: float = 1e-3, iterations: int = 5, layers: np.ndarray = None):
@@ -40,40 +39,44 @@ class MLPClassifier():
         self.iterations = iterations
         self.layers = layers
 
+        for i in range(self.layers.shape[0] - 1):
+            self.W.append(np.random.randn(self.layers[i], self.layers[i + 1]))
+            self.b.append(np.zeros((1, self.layers[i + 1])))
+
     def forward(self, x: np.ndarray):
-        n_layers = self.layers.shape[0]
-        for idx in range(n_layers - 1): 
-            z = np.dot(x, self.W[idx]) + self.b[idx] 
+        activations = [x]
+        num_layers = self.layers.shape[0]
 
-            if idx == n_layers - 2: 
-                x = sigmoid(z)
-            else: 
-                x = ReLU(z)
+        for idx in range(num_layers - 1):
+            z = np.dot(x, self.W[idx]) + self.b[idx]
+            x = sigmoid(z) if idx == num_layers - 2 else ReLU(z)
+            activations.append(x)
 
-        return x  
+        return activations
 
+    def train(self, x: np.ndarray, y: np.ndarray) -> None:
+        m = y.shape[0]
+        y = y.reshape(-1,1)
 
-    def train(self, x: np.ndarray, y: np.ndarray):
-        self.x = x
-        self.y = y
-        n_layers = self.layers.shape[0]
+        for _ in range(self.iterations):
+            activations = self.forward(x)
+            y_pred = activations[-1]
+            loss = compute_loss(y, y_pred)
 
-        for i in range(n_layers - 1):
-            self.W.append(np.random.randn(self.layers[i], self.layers[i+1]))
-            self.b.append(np.zeros((1, self.layers[i+1])))
+            dz = y_pred - y
 
-        print(self.iterations)
-        for i in range(self.iterations):
-            y_pred = self.forward(x)
-            #loss = compute_loss(y, y_pred)
+            for idx in range(len(self.layers) - 2, -1, -1):
+                a_prev = activations[idx]
 
+                dw = np.dot(a_prev.T, dz) / m  
+                db = np.sum(dz, axis=0, keepdims=True) / m 
 
-x = np.array([[1,0,1],
-         [1,1,1],
-         [0,0,0],
-         [1,1,1]])
-    
-y = np.array([1,1,0,1])
+                self.W[idx] -= self.lr * dw
+                self.b[idx] -= self.lr * db
 
-mlp = MLPClassifier(layers=np.array([3, 8, 1]))
-mlp.train(x, y)          
+                if idx > 0:
+                    dz = np.dot(dz, self.W[idx].T) * ReLU_derivative(activations[idx])
+
+    def predict(self, x: np.ndarray):
+        y_pred = self.forward(x)
+        return (y_pred[len(y_pred) - 1] >= 0.5).astype(int).flatten()[0]

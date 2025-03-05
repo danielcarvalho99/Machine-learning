@@ -2,7 +2,7 @@ from knn import KNNClassifier
 from naive_bayes import NaiveBayesClassifier
 from logistic_regression import LogisticRegressionClassifier
 from svm import SVMClassifier
-from neural_network import PerceptronClassifier
+from neural_network import PerceptronClassifier, MLPClassifier
 import numpy as np
 
 
@@ -22,9 +22,10 @@ if __name__ == '__main__':
     lg = LogisticRegressionClassifier()
     svm = SVMClassifier()
     pcp = PerceptronClassifier()
+    mlp = MLPClassifier(lr=4e-3, iterations=100, layers=np.array([3, 5, 1]))
     
 
-    for model in [nb, knn, lg, svm, pcp]:
+    for model in [nb, knn, lg, svm, pcp, mlp]:
      model.train(x, y)
      pred = model.predict(instance)
      print(f"{model.__class__.__name__} predicted {pred}")

@@ -8,3 +8,9 @@ def unit_step(z: np.ndarray, threshold = 0.5) -> np.ndarray:
 
 def ReLU(z: np.ndarray) -> np.ndarray:
     return np.maximum(0, z)
+
+def ReLU_derivative(x):
+    return (x > 0).astype(float)
+
+def sigmoid_derivative(x):
+    return sigmoid(x) * (1 - sigmoid(x))
