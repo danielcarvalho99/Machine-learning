@@ -30,6 +30,6 @@ class SVMClassifier():
                 self.W -= self.lr * dw
                 self.b -= self.lr * db
 
-    def predict(self, instance: np.ndarray):
+    def predict(self, instance: np.ndarray) -> int:
         pred = np.dot(instance, self.W) - self.b
         return int(np.sign(pred))

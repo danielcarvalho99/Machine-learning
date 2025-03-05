@@ -3,13 +3,13 @@ from utils import compute_loss
 from functions import sigmoid
 
 class LogisticRegressionClassifier():
-    def __init__(self, lr: float = 1e-3, iterations: int = 100):
+    def __init__(self, lr: float = 1e-3, iterations: int = 1000):
         self.W = None
         self.b = None
         self.lr = lr
         self.iterations = iterations
  
-    def train(self, x: np.ndarray, y: np.ndarray):
+    def train(self, x: np.ndarray, y: np.ndarray) -> None:
         self.x = x
         self.y = y.reshape(-1, 1)  
 
@@ -30,7 +30,7 @@ class LogisticRegressionClassifier():
 
             compute_loss(self.y, y_pred)
     
-    def predict(self, instance: np.ndarray):
+    def predict(self, instance: np.ndarray) -> int:
          z = np.dot(instance.reshape(1, -1), self.W) + self.b
          y_pred = 1 / (1 + np.exp(-z))
          return int(y_pred > 0.5)

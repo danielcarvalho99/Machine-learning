@@ -5,7 +5,7 @@ class KNNClassifier():
     def __init__(self, neighbors: int):
         self.neighbors = neighbors
 
-    def train(self, x: np.ndarray, y: np.ndarray):
+    def train(self, x: np.ndarray, y: np.ndarray) -> None:
         self.x = x
         self.y = y
 

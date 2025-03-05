@@ -8,7 +8,7 @@ class LinearRegression():
         self.W = None
         self.b = None
 
-    def train(self, x: np.ndarray, y: np.ndarray):
+    def train(self, x: np.ndarray, y: np.ndarray) -> None:
         self.x = x
         self.y = y.reshape(-1,1)
         m, n = self.x.shape
@@ -29,9 +29,3 @@ class LinearRegression():
     def predict(self, instance: np.ndarray) -> int:
         y_pred = np.dot(instance, self.W) + self.b
         return y_pred
-
-lr = LinearRegression()
-x = np.array([[1],[2.1], [3.2], [4]])
-y = np.array([3, 5.2, 7.2, 9.2])
-lr.train(x, y)
-print(lr.predict([1]))

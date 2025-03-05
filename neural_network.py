@@ -43,7 +43,7 @@ class MLPClassifier():
             self.W.append(np.random.randn(self.layers[i], self.layers[i + 1]))
             self.b.append(np.zeros((1, self.layers[i + 1])))
 
-    def forward(self, x: np.ndarray):
+    def forward(self, x: np.ndarray) -> np.ndarray:
         activations = [x]
         num_layers = self.layers.shape[0]
 
@@ -75,6 +75,6 @@ class MLPClassifier():
                 if idx > 0:
                     dz = np.dot(dz, self.W[idx].T) * ReLU_derivative(activations[idx])
 
-    def predict(self, x: np.ndarray):
+    def predict(self, x: np.ndarray) -> int:
         y_pred = self.forward(x)[-1]
         return (y_pred[0,0]>= 0.5).astype(int)
