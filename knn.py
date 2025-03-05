@@ -1,5 +1,4 @@
 import numpy as np
-from math import sqrt
 from statistics import mode
 
 class KNNClassifier():
