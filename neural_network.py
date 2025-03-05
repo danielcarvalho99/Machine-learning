@@ -9,7 +9,7 @@ class PerceptronClassifier():
         self.lr = lr
         self.iterations = iterations
  
-    def train(self, x: np.ndarray, y: np.ndarray):
+    def train(self, x: np.ndarray, y: np.ndarray) -> None:
         self.x = x
         self.y = y
 
@@ -32,7 +32,7 @@ class PerceptronClassifier():
          return unit_step(z)
 
 class MLPClassifier():
-    def __init__(self, lr: float = 1e-3, iterations: int = 5, layers: np.ndarray = None):
+    def __init__(self, lr: float = 1e-3, iterations: int = 100, layers: np.ndarray = None):
         self.W = []
         self.b = []
         self.lr = lr
@@ -61,15 +61,13 @@ class MLPClassifier():
         for _ in range(self.iterations):
             activations = self.forward(x)
             y_pred = activations[-1]
-            loss = compute_loss(y, y_pred)
-
             dz = y_pred - y
 
             for idx in range(len(self.layers) - 2, -1, -1):
-                a_prev = activations[idx]
+                x_prev = activations[idx]
 
-                dw = np.dot(a_prev.T, dz) / m  
-                db = np.sum(dz, axis=0, keepdims=True) / m 
+                dw = np.dot(x_prev.T, dz) / m  
+                db = np.sum(dz, axis=0) / m 
 
                 self.W[idx] -= self.lr * dw
                 self.b[idx] -= self.lr * db
@@ -78,5 +76,5 @@ class MLPClassifier():
                     dz = np.dot(dz, self.W[idx].T) * ReLU_derivative(activations[idx])
 
     def predict(self, x: np.ndarray):
-        y_pred = self.forward(x)
-        return (y_pred[len(y_pred) - 1] >= 0.5).astype(int).flatten()[0]
+        y_pred = self.forward(x)[-1]
+        return (y_pred[0,0]>= 0.5).astype(int)
