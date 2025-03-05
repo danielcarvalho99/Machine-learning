@@ -93,8 +93,7 @@ class DecisionTreeClassifier():
         return value
 
     def predict(self, X: np.ndarray):
-        return 1
-        #return np.array([self._traverse_tree(x, self.root) for x in X])
+        return self._traverse_tree(X, self.root)
 
     def _traverse_tree(self, x, node):
         if node.is_leaf_node():
