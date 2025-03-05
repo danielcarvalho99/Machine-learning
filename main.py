@@ -2,7 +2,7 @@ from knn import KNNClassifier
 from naive_bayes import NaiveBayesClassifier
 from logistic_regression import LogisticRegressionClassifier
 from svm import SVMClassifier
-from perceptron import PerceptronClassifier
+from neural_network import PerceptronClassifier
 import numpy as np
 
 
