@@ -16,3 +16,8 @@ def lasso_loss(y_true: np.ndarray, y_pred: np.ndarray, w: np.ndarray, lambda_val
         m = y_true.shape[0]
         loss = (1/m) * (np.sum(np.sqrt((y_true - y_pred) ** 2)) + np.sum(lambda_val * np.absolute(w)))
         return loss
+
+def ridge_loss(y_true: np.ndarray, y_pred: np.ndarray, w: np.ndarray, lambda_val: float) -> float:
+        m = y_true.shape[0]
+        loss = (1/m) * (np.sum(np.sqrt((y_true - y_pred) ** 2)) + np.sum(lambda_val * (w**2)))
+        return loss

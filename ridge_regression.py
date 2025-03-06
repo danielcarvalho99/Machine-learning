@@ -1,7 +1,7 @@
 import numpy as np
-from utils import lasso_loss
+from utils import ridge_loss
 
-class LassoRegression():
+class RidgeRegression():
     def __init__(self, lr: float=1e-3, iterations: int=1000, lambda_val: float=1e-3):
         self.lr = lr
         self.iterations = iterations
@@ -18,12 +18,12 @@ class LassoRegression():
         self.W = np.random.rand(n, 1)
         self.b = np.zeros((1, 1))
 
-        for _ in range(self.iterations):
+        for i in range(self.iterations):
             for _, w_i in enumerate(self.x):
                 y_pred = np.dot(self.x, self.W) + self.b
-                self.loss = lasso_loss(self.y, y_pred, w_i, self.lambda_val)
+                self.loss = ridge_loss(self.y, y_pred, w_i, self.lambda_val)
                 
-                dw = -2/m * np.dot(self.x.T ,(self.y - y_pred)) + (np.sign(w_i) * self.lambda_val)
+                dw = -2/m * np.dot(self.x.T ,(self.y - y_pred)) + 2 * self.lambda_val * w_i
                 db = -2/m * (np.sum(y - y_pred))
                 
                 self.W -= self.lr * dw
