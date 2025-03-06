@@ -21,3 +21,8 @@ def ridge_loss(y_true: np.ndarray, y_pred: np.ndarray, w: np.ndarray, lambda_val
         m = y_true.shape[0]
         loss = (1/m) * (np.sum(np.sqrt((y_true - y_pred) ** 2)) + np.sum(lambda_val * (w**2)))
         return loss
+
+def elastic_net_loss(y_true: np.ndarray, y_pred: np.ndarray, w: np.ndarray, lambda_1: float, lambda_2: float) -> float:
+        m = y_true.shape[0]
+        loss = (1/m) * (np.sum(np.sqrt((y_true - y_pred) ** 2)) + np.sum(lambda_1 * np.absolute(w)) + np.sum(lambda_2 * (w**2)))
+        return loss
